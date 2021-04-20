@@ -1,4 +1,4 @@
-- 👋 Hi, I’m @wiskerpaddy
+- 👋 Hi, I’m wisky
 - 👀 I’m interested in AR and AI in these days.
 - 🌱 I’m currently learning machine-learning, C, SQL.
 
