@@ -1,0 +1,18 @@
+命名 規則
+
+	変数	変数名はlowerCamelCaseで表す。
+			（小文字で始まるキャメルケース）
+			例	let count = 1; 
+				let myName = 'ねこ';
+				
+	関数	関数名（メソッド名）も変数と同じくlowerCamelCaseで表します。
+			変数と区別するために動詞から始めて、「動詞+名詞」の形式 にします。
+			例	function getCount()	
+				
+	定数	定数名は全て大文字で表現して、単語間を"_"で区切って表し ます。
+			例	const MAX_ VALUE = 10000; 
+				const BOOK_ OWNER = 'ミラーマンズ 研究所';
+				
+	クラス名	クラス名はUpperCamelCaseで表します。
+				（大文字で始まるキャメルケースで、PascalCaseとも言う）
+				例	（大文字で始まるキャメルケースで、PascalCaseとも言う）
