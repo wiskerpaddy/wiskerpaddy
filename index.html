@@ -219,16 +219,20 @@
             </a>
         `;
     }
+    
     // 全てのカードにホバー音の開始・停止を設定
     function setupHoverSounds() {
         const cards = document.querySelectorAll('.card');
         cards.forEach(card => {
             card.addEventListener('mouseenter', () => {
-                pointSound.currentTime = 0; // 頭出し
-                pointSound.play().catch(() => {}); // 自動再生ブロック対策
+                pointSound.volume = 0.5; // 音量を戻す
+                pointSound.currentTime = 0;
+                pointSound.play().catch(() => {});
             });
+
             card.addEventListener('mouseleave', () => {
-                pointSound.pause();
+                // 徐々に音量を下げるフェードアウト処理
+                fadeOutAndPause(pointSound, 100); // 100ミリ秒でフェード
             });
         });
     }
@@ -238,6 +242,26 @@
             clickSound.currentTime = 0;
             clickSound.play().catch(() => {});
         }
+    }
+
+    /**
+     * 音量を滑らかに下げてから停止させる（ポップノイズ対策）
+     * @param {HTMLAudioElement} audio 
+     * @param {number} ms フェード時間（ミリ秒）
+     */
+    function fadeOutAndPause(audio, ms) {
+        const startVolume = audio.volume;
+        const step = startVolume / (ms / 10);
+        
+        const fadeInterval = setInterval(() => {
+            if (audio.volume > step) {
+                audio.volume -= step;
+            } else {
+                audio.volume = 0;
+                audio.pause();
+                clearInterval(fadeInterval);
+            }
+        }, 10);
     }
 
     init();
