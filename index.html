@@ -3,141 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PHANTOM PROJECTS</title>
+    <title>PHANTOM PROJECTS | Portfolio</title>
     <style>
         :root {
-            --p5-red: #d31212;
+            --p5-red: #00adb5;
             --p5-black: #000000;
             --p5-white: #ffffff;
-            --p5-gray: #222222;
+            --p5-gray: #1a1a1a;
         }
 
-        /* 派手な背景アニメーション */
+        /* 背景：P5風ダイヤパターン + パララックス対応 */
         body { 
             background-color: var(--p5-black);
             background-image: 
                 linear-gradient(45deg, var(--p5-red) 25%, transparent 25%),
                 linear-gradient(-45deg, var(--p5-red) 25%, transparent 25%);
-            background-size: 100px 100px;
+            background-size: 80px 80px;
             background-attachment: fixed;
+            background-position: 0 0;
             color: var(--p5-white);
-            font-family: 'Arial Black', sans-serif; /* 勢いのあるフォント */
+            font-family: 'Arial Black', 'Impact', sans-serif;
             overflow-x: hidden;
-            padding: 2rem 1rem;
+            padding: 4rem 1rem;
+            transition: background-position 0.1s ease-out;
         }
 
-        /* 斜めの背景オーバーレイ */
+        /* 斜めの黒オーバーレイ */
         body::before {
             content: '';
             position: fixed;
-            top: 0; left: 0; width: 150%; height: 150%;
-            background: rgba(0,0,0,0.8);
-            transform: rotate(-5deg) translate(-10%, -10%);
+            top: -25%; left: -25%; width: 150%; height: 150%;
+            background: rgba(0, 0, 0, 0.85);
+            transform: rotate(-7deg);
             z-index: -1;
         }
 
-        .container { max-width: 900px; margin: 0 auto; position: relative; }
+        .container { max-width: 900px; margin: 0 auto; }
 
         header { 
-            margin-bottom: 4rem; 
-            transform: rotate(-2deg); 
-            text-align: left;
+            margin-bottom: 5rem; 
+            transform: rotate(-3deg) translateX(-10px);
         }
 
-        /* P5風の切り抜きタイトル */
         h1 { 
-            font-size: 4rem; 
-            font-weight: 900; 
-            text-transform: uppercase;
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 900;
             background: var(--p5-white);
             color: var(--p5-black);
             display: inline-block;
-            padding: 0 20px;
-            transform: skewX(-10deg);
-            box-shadow: 10px 10px 0 var(--p5-red);
+            padding: 0.2rem 2rem;
+            transform: skewX(-15deg);
+            box-shadow: 12px 12px 0 var(--p5-red);
+            text-transform: uppercase;
         }
 
-        #repo-list { display: grid; gap: 2rem; }
+        #repo-list { display: grid; gap: 2.5rem; }
 
-        /* カードデザインを大胆に */
+        /* カード：歪みと立体感 */
         .card {
             background: var(--p5-white);
             color: var(--p5-black);
-            padding: 0;
             display: flex;
-            gap: 0;
             text-decoration: none;
-            transform: skewX(-5deg); /* 全体を斜めに */
-            transition: all 0.3s ease;
-            border: 4px solid var(--p5-black);
-            overflow: hidden;
-            box-shadow: 15px 15px 0 rgba(0,0,0,0.5);
+            transform: skewX(-6deg);
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            border: 5px solid var(--p5-black);
+            position: relative;
+            box-shadow: 15px 15px 0 rgba(0,0,0,0.6);
+            cursor: pointer;
         }
 
         .card:hover {
-            transform: skewX(-5deg) scale(1.05);
-            box-shadow: 20px 20px 0 var(--p5-red);
+            transform: skewX(-6deg) scale(1.03) translate(5px, -5px);
+            box-shadow: 25px 25px 0 var(--p5-red);
             z-index: 10;
         }
 
-        /* アイコン部分の斜め切り抜き */
+        /* アイコン切り抜き */
         .card-icon-wrapper {
-            width: 140px;
-            height: 140px;
+            width: 150px; height: 150px;
             background: var(--p5-black);
             overflow: hidden;
-            clip-path: polygon(0 0, 100% 0, 80% 100%, 0% 100%);
+            clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%);
             flex-shrink: 0;
         }
 
         .card-icon {
             width: 100%; height: 100%;
             object-fit: cover;
-            filter: grayscale(1) contrast(1.2); /* 白黒でクールに */
-            transition: 0.3s;
+            filter: grayscale(1) contrast(1.1);
+            transition: 0.4s;
         }
 
-        .card:hover .card-icon { filter: none; }
+        .card:hover .card-icon { filter: grayscale(0) contrast(1); }
 
         .card-body { 
-            flex: 1; padding: 1rem; 
-            transform: skewX(5deg); /* テキストの歪みを戻す */
+            flex: 1; padding: 1.2rem;
+            transform: skewX(6deg); /* テキストの歪みを戻す */
         }
 
         .card-title { 
-            font-size: 1.5rem; font-weight: 900; 
+            font-size: 1.6rem; font-weight: 900;
             background: var(--p5-black);
             color: var(--p5-white);
-            padding: 5px 15px;
+            padding: 4px 18px;
             display: inline-block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
         }
 
-        .card-desc { font-size: 0.9rem; margin-bottom: 1rem; font-weight: bold; }
+        /* ホバー時のノイズ（グリッチ） */
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            25% { transform: translate(-2px, 1px); }
+            50% { transform: translate(2px, -1px); }
+            100% { transform: translate(0); }
+        }
+        .card:hover .card-title { animation: glitch 0.15s infinite; }
 
-        .tags { display: flex; gap: 0.5rem; }
+        .card-desc { font-size: 0.95rem; font-weight: bold; line-height: 1.4; margin-bottom: 1rem; }
+
+        .tags { display: flex; flex-wrap: wrap; gap: 0.6rem; }
         .tag { 
-            background: var(--p5-red); 
-            color: white; 
-            padding: 2px 10px; 
-            font-size: 0.7rem; 
-            transform: rotate(-2deg);
+            background: var(--p5-red); color: white;
+            padding: 2px 12px; font-size: 0.75rem;
+            transform: rotate(-2deg) skewX(-10deg);
         }
 
-        .meta { 
-            margin-top: 1rem; font-size: 0.8rem; text-align: right; font-style: italic;
-        }
+        .meta { margin-top: 1.2rem; font-size: 0.8rem; text-align: right; opacity: 0.7; font-style: italic; }
 
-        /* 手書き風の装飾 */
+        /* 手書き風装飾 */
         .card::after {
             content: 'TAKE YOUR HEART';
-            position: absolute;
-            bottom: -5px; right: 10px;
-            font-size: 0.6rem;
-            color: var(--p5-red);
-            opacity: 0.5;
+            position: absolute; bottom: 5px; right: 15px;
+            font-size: 0.65rem; color: var(--p5-red); font-weight: bold; opacity: 0.4;
         }
-
     </style>
 </head>
 <body>
@@ -147,23 +146,50 @@
         <h1>My Archives</h1>
     </header>
 
-    <main id="repo-list"></main>
+    <main id="repo-list">
+        </main>
+    <footer style="margin-top: 5rem; padding-bottom: 2rem; text-align: center; font-size: 0.7rem; opacity: 0.5;">
+        <p>Sound Effect by <a href="https://soundeffect-lab.info/" target="_blank" style="color: var(--p5-white); text-decoration: none;">効果音ラボ</a></p>
+        <p>&copy; 2026 Your Name / Phantom Projects</p>
+    </footer>
 </div>
 
 <script>
     const CONFIG = {
         username: 'wiskerpaddy',
-        defaultBranch: 'main'
+        defaultBranch: 'main',
+        clickSoundUrl: 'clickSound.mp3',
+        pointSoundUrl: 'pointSound.mp3',
     };
+
+    // 背景パララックス
+    document.addEventListener('mousemove', (e) => {
+        const moveX = (e.clientX / window.innerWidth - 0.5) * 30;
+        const moveY = (e.clientY / window.innerHeight - 0.5) * 30;
+        document.body.style.backgroundPosition = `${moveX}px ${moveY}px`;
+    });
+
+    // 音声オブジェクトの設定
+    const clickSound = new Audio(CONFIG.clickSoundUrl);
+    const pointSound = new Audio(CONFIG.pointSoundUrl);
+    pointSound.loop = true; // ホバー中はループ再生
+    pointSound.volume = 0.5; // 音量は適宜調整してください
 
     async function init() {
         const listEl = document.getElementById('repo-list');
         try {
             const res = await fetch('./data.json');
+            if (!res.ok) throw new Error();
             const repos = await res.json();
+            
+            // 1. カードを生成して挿入
             listEl.innerHTML = repos.map(repo => renderCard(repo)).join('');
+            
+            // 2. 挿入されたカードに対してホバーイベントを設定
+            setupHoverSounds();
+            
         } catch (err) {
-            listEl.innerHTML = 'DATA NOT FOUND';
+            listEl.innerHTML = '<h2 style="transform:rotate(5deg);background:red;padding:2rem;">DATA NOT FOUND. <br>CHECK GITHUB ACTIONS!</h2>';
         }
     }
 
@@ -173,21 +199,43 @@
         const pagesUrl = `https://${CONFIG.username}.github.io/${repo.name}/`;
 
         return `
-            <a href="${pagesUrl}" class="card" target="_blank">
+            <a href="${pagesUrl}" class="card" target="_blank" onclick="playClickSound()">
                 <div class="card-icon-wrapper">
-                    <img src="${iconUrl}" class="card-icon" onerror="this.src='https://via.placeholder.com/150/000000/FFFFFF?text=?'" alt="">
+                    <img src="${iconUrl}" class="card-icon" onerror="this.src='https://via.placeholder.com/150/000000/FFFFFF?text=?'">
                 </div>
                 <div class="card-body">
                     <span class="card-title">${repo.name}</span>
-                    <p class="card-desc">${repo.description || 'MISSION UNKNOWN'}</p>
+                    <p class="card-desc">${repo.description || 'STATUS: UNKNOWN'}</p>
                     <div class="tags">
                         ${(repo.topics || []).map(t => `<span class="tag">#${t}</span>`).join('')}
                     </div>
-                    <div class="meta">Captured at: ${pushedDate}</div>
+                    <div class="meta">CAPTURED: ${pushedDate}</div>
                 </div>
             </a>
         `;
     }
+
+    // 全てのカードにホバー音の開始・停止を設定
+    function setupHoverSounds() {
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                pointSound.currentTime = 0; // 頭出し
+                pointSound.play().catch(() => {}); // 自動再生ブロック対策
+            });
+            card.addEventListener('mouseleave', () => {
+                pointSound.pause();
+            });
+        });
+    }
+
+    function playClickSound() {
+        if(CONFIG.clickSoundUrl) {
+            clickSound.currentTime = 0;
+            clickSound.play().catch(() => {});
+        }
+    }
+
     init();
 </script>
 </body>
