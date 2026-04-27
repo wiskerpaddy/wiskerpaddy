@@ -1,0 +1,25 @@
+name: Update Repository Data
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # 毎日日本時間午前9時に実行
+  workflow_dispatch:      # 手動実行ボタンも追加
+
+jobs:
+  update-json:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch Repositories and Save JSON
+        run: |
+          curl -s "https://api.github.com/users/${{ github.repository_owner }}/repos?sort=pushed&direction=desc" \
+          | jq '[.[] | select(.has_pages == true)]' > data.json
+
+      - name: Commit and Push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data.json
+          git commit -m "Update repository list" || exit 0
+          git push
