@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>My Project Portal</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 2em auto; padding: 0 1em; }
+        .repo-card { border: 1px solid #ddd; padding: 1em; margin-bottom: 1em; border-radius: 8px; }
+        .repo-title { font-weight: bold; font-size: 1.2em; color: #0366d6; text-decoration: none; }
+        .repo-desc { color: #586069; font-size: 0.9em; margin: 0.5em 0; }
+        .tag { background: #f1f8ff; color: #0366d6; padding: 2px 8px; border-radius: 12px; font-size: 0.8em; margin-right: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Project Index</h1>
+    <div id="repo-list">Loading projects...</div>
+
+    <script>
+        const USERNAME = 'wiskerpaddy'; // ←ここを変更
+
+        async function fetchRepos() {
+            try {
+                // APIではなく、GitHub Actionsが生成したローカルのJSONを読み込む
+                const response = await fetch('./data.json');
+                const pagesRepos = await response.json();
+                
+                const listContainer = document.getElementById('repo-list');
+                listContainer.innerHTML = '';
+
+                pagesRepos.forEach(repo => {
+                    const card = document.createElement('div');
+                    card.className = 'repo-card';
+                    
+                    const pagesUrl = `https://${USERNAME}.github.io/${repo.name}/`;
+                    const iconUrl = `https://raw.githubusercontent.com/${USERNAME}/${repo.name}/main/icon.png`;
+                    const pushedDate = new Date(repo.pushed_at).toLocaleDateString('ja-JP');
+
+                    card.innerHTML = `
+                        <img src="${iconUrl}" class="repo-icon" onerror="this.className='no-icon'" alt="">
+                        <div class="repo-info">
+                            <a href="${pagesUrl}" class="repo-title" target="_blank">${repo.name}</a>
+                            <p class="repo-desc">${repo.description || '説明はありません。'}</p>
+                            <div>${repo.topics.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+                            <div class="repo-meta">Last Updated: ${pushedDate}</div>
+                        </div>
+                    `;
+                    listContainer.appendChild(card);
+                });
+            } catch (e) {
+                document.getElementById('repo-list').innerHTML = 'データの取得に失敗しました。';
+            }
+        }
+        fetchRepos();
+    </script>
+</body>
+</html>
