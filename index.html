@@ -137,6 +137,58 @@
             position: absolute; bottom: 5px; right: 15px;
             font-size: 0.65rem; color: var(--p5-red); font-weight: bold; opacity: 0.4;
         }
+        /* --- 既存のスタイルに以下を追加・修正 --- */
+
+        /* 1. 画面全体の余白をスマホで調整 */
+        body {
+            padding: 2rem 0.5rem; /* スマホでは左右の余白を狭く */
+        }
+
+        /* 2. カードの横並びを縦並びに切り替え */
+        .card {
+            flex-direction: row; /* 基本は横並び */
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* 3. モバイル専用設定（画面幅が600px以下の時） */
+        @media (max-width: 600px) {
+            header {
+                margin-bottom: 3rem;
+            }
+
+            h1 {
+                font-size: 2rem; /* タイトルを小さく */
+                padding: 0.2rem 1rem;
+            }
+
+            .card {
+                flex-direction: column; /* 縦並びに変更 */
+                transform: skewX(-3deg); /* 歪みを少し抑える（見やすさ重視） */
+            }
+
+            .card-icon-wrapper {
+                width: 100%; /* アイコンを全幅に */
+                height: 180px;
+                clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%); /* 切り抜きを下に */
+            }
+
+            .card-body {
+                transform: skewX(3deg); /* 歪みを戻す */
+                padding: 1rem;
+            }
+
+            .card-title {
+                font-size: 1.2rem;
+                width: 100%;
+                display: block;
+                box-sizing: border-box;
+            }
+
+            .meta {
+                text-align: left; /* スマホでは左寄せが見やすい */
+            }
+        }
     </style>
 </head>
 <body>
