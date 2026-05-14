@@ -58,6 +58,33 @@
             text-transform: uppercase;
         }
 
+        /* 💡 フィルターのアクティブ状態を示すエリア */
+        .filter-status-area {
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            display: none;
+            transform: rotate(-1deg);
+        }
+        .filter-status-badge {
+            background: var(--p5-white);
+            color: var(--p5-black);
+            padding: 4px 15px;
+            box-shadow: 5px 5px 0 var(--p5-red);
+            margin-right: 10px;
+            display: inline-block;
+            transform: skewX(-10deg);
+        }
+        .btn-clear-filter {
+            background: var(--p5-red);
+            color: var(--p5-white);
+            border: 3px solid var(--p5-black);
+            padding: 2px 10px;
+            cursor: pointer;
+            font-weight: 900;
+            transform: skewX(-10deg);
+        }
+
         #repo-list { display: grid; gap: 2.5rem; }
 
         /* カード：歪みと立体感 */
@@ -103,13 +130,120 @@
             transform: skewX(6deg); /* テキストの歪みを戻す */
         }
 
+        .card-title-area {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 0.8rem;
+        }
+
+        /* 💡 隙間調整：技術スタック表示の下にマージンを追加 */
+        .card-stack {
+            font-size: 0.8rem;
+            font-weight: 900;
+            color: var(--p5-red);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem; /* ここで程よい隙間を空けました */
+        }
+
         .card-title { 
             font-size: 1.6rem; font-weight: 900;
             background: var(--p5-black);
             color: var(--p5-white);
             padding: 4px 18px;
             display: inline-block;
-            margin-bottom: 0.8rem;
+        }
+        /* プロフィールカードのスタイル設定 */
+        .profile-card {
+            background: var(--p5-white);
+            color: var(--p5-black);
+            padding: 2rem;
+            margin-bottom: 4rem;
+            transform: skewX(-6deg);
+            border: 5px solid var(--p5-black);
+            box-shadow: 15px 15px 0 rgba(0,0,0,0.6);
+        }
+
+        .profile-body {
+            transform: skewX(6deg); /* 歪みを戻す */
+        }
+
+        .profile-title {
+            font-size: 1.4rem;
+            font-weight: 900;
+            background: var(--p5-black);
+            color: var(--p5-white);
+            padding: 4px 15px;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .profile-desc {
+            font-size: 1rem;
+            font-weight: bold;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            font-family: sans-serif;
+            color: #111;
+        }
+
+        /* プロフィール側のスキルタグ用コンテナ */
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+
+        /* スキルタグをボタンとしてデザイン */
+        .skill-tag {
+            background: var(--p5-gray);
+            color: var(--p5-white);
+            padding: 4px 12px;
+            font-size: 0.8rem;
+            transform: rotate(-1deg) skewX(-10deg);
+            transition: 0.15s;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .skill-tag.core {
+            background: var(--p5-red);
+            color: var(--p5-white);
+            font-weight: 900;
+        }
+
+        .skill-tag:hover {
+            background: var(--p5-black);
+            color: var(--p5-white);
+            transform: scale(1.1) rotate(1deg);
+        }
+
+        /* 絞り込み中ステータス表示エリア */
+        .filter-status-area {
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            display: none;
+            transform: rotate(-1deg);
+        }
+        .filter-status-badge {
+            background: var(--p5-white);
+            color: var(--p5-black);
+            padding: 4px 15px;
+            box-shadow: 5px 5px 0 var(--p5-red);
+            margin-right: 10px;
+            display: inline-block;
+            transform: skewX(-10deg);
+        }
+        .btn-clear-filter {
+            background: var(--p5-red);
+            color: var(--p5-white);
+            border: 3px solid var(--p5-black);
+            padding: 2px 10px;
+            cursor: pointer;
+            font-weight: 900;
+            transform: skewX(-10deg);
         }
 
         /* ホバー時のノイズ（グリッチ） */
@@ -124,10 +258,17 @@
         .card-desc { font-size: 0.95rem; font-weight: bold; line-height: 1.4; margin-bottom: 1rem; }
 
         .tags { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+        
+        /* タグをホバーした際の変化 */
         .tag { 
             background: var(--p5-red); color: white;
             padding: 2px 12px; font-size: 0.75rem;
             transform: rotate(-2deg) skewX(-10deg);
+            transition: 0.1s;
+        }
+        .tag:hover {
+            background: var(--p5-black);
+            color: var(--p5-white);
         }
 
         .meta { margin-top: 1.2rem; font-size: 0.8rem; text-align: right; opacity: 0.7; font-style: italic; }
@@ -138,7 +279,6 @@
             position: absolute; bottom: 5px; right: 15px;
             font-size: 0.65rem; color: var(--p5-red); font-weight: bold; opacity: 0.4;
         }
-        /* --- 既存のスタイルに以下を追加・修正 --- */
 
         /* 1. 画面全体の余白をスマホで調整 */
         body {
@@ -198,7 +338,7 @@
     <header>
         <h1>My Archives</h1>
     </header>
-    
+
     <section class="profile-card">
         <div class="profile-body">
             <span class="profile-title">SYSTEM STATUS</span>
@@ -206,22 +346,25 @@
                 課題やアイデアを即座に実用的なアプリケーションとして具現化するデベロッパー。フロントエンド、Android（Kotlin）、自動化（GAS）など、領域を問わず自走して最適なシステムを構築します。
             </div>
             <div class="skill-tags">
-                <span class="skill-tag core">JavaScript (ES6+)</span>
-                <span class="skill-tag core">Kotlin (Android)</span>
-                <span class="skill-tag core">Google Apps Script</span>
-                <span class="skill-tag">Python</span>
-                <span class="skill-tag">Web Audio API</span>
-                <span class="skill-tag">HTML5 / Tone.js</span>
-                <span class="skill-tag">Git / GitHub</span>
+                <span class="skill-tag core" onclick="filterByTag(event, 'javascript')">JavaScript (ES6+)</span>
+                <span class="skill-tag core" onclick="filterByTag(event, 'kotlin')">Kotlin (Android)</span>
+                <span class="skill-tag core" onclick="filterByTag(event, 'google-apps-script')">Google Apps Script</span>
+                <span class="skill-tag" onclick="filterByTag(event, 'python')">Python</span>
+                <span class="skill-tag" onclick="filterByTag(event, 'web-audio-api')">Web Audio API</span>
+                <span class="skill-tag" onclick="filterByTag(event, 'tone-js')">HTML5 / Tone.js</span>
+                <span class="skill-tag" onclick="filterByTag(event, 'github')">Git / GitHub</span>
             </div>
         </div>
     </section>
+
     <div id="filter-status" class="filter-status-area">
         <span id="filter-label" class="filter-status-badge">FILTER: NONE</span>
         <button class="btn-clear-filter" onclick="clearFilter()">SHOW ALL</button>
     </div>
+
     <main id="repo-list">
-        </main>
+    </main>
+
     <footer style="margin-top: 5rem; padding-bottom: 2rem; text-align: center; font-size: 0.7rem; opacity: 0.5;">
         <p>Sound Effect by <a href="https://soundeffect-lab.info/" target="_blank" style="color: var(--p5-white); text-decoration: none;">効果音ラボ</a></p>
         <p>&copy; 2026 wiskerpaddy / Phantom Projects</p>
@@ -249,60 +392,61 @@
     pointSound.loop = true; // ホバー中はループ再生
     pointSound.volume = 0.5; // 音量は適宜調整してください
 
+    // グローバルで保持するデータとアクティブフィルター
+    let allRepos = [];
+    let currentFilter = null;
+
     async function init() {
         const listEl = document.getElementById('repo-list');
         try {
             const res = await fetch('./data.json');
             if (!res.ok) throw new Error();
-            const repos = await res.json();
+            allRepos = await res.json();
             
-            // 1. カードを生成して挿入
-            listEl.innerHTML = repos.map(repo => renderCard(repo)).join('');
-            
-            // 2. 挿入されたカードに対してホバーイベントを設定
-            setupHoverSounds();
+            renderAll();
             
         } catch (err) {
             listEl.innerHTML = '<h2 style="transform:rotate(5deg);background:red;padding:2rem;">DATA NOT FOUND. <br>CHECK GITHUB ACTIONS!</h2>';
         }
     }
 
-    // 💡 画面描画ロジックを一元化
+    // 画面再描画
     function renderAll() {
         const listEl = document.getElementById('repo-list');
         const filterStatusEl = document.getElementById('filter-status');
         const filterLabelEl = document.getElementById('filter-label');
 
-        // フィルターが掛かっている場合は絞り込む
+        // 絞り込み処理
         const filteredRepos = currentFilter 
-            ? allRepos.filter(repo => (repo.topics || []).includes(currentFilter))
+            ? allRepos.filter(repo => {
+                const topics = repo.topics || [];
+                return topics.some(t => t.toLowerCase() === currentFilter.toLowerCase() || t.toLowerCase().replace(/-/g, '') === currentFilter.toLowerCase().replace(/-/g, ''));
+            })
             : allRepos;
 
-        // フィルターUIの表示切り替え
+        // 💡 修正ポイント：条件を消して、常に 'block' (表示) にする
+        filterStatusEl.style.display = 'block'; 
+
         if (currentFilter) {
             filterLabelEl.innerText = `FILTER: #${currentFilter.toUpperCase()}`;
-            filterStatusEl.style.display = 'block';
         } else {
-            filterStatusEl.style.display = 'none';
+            filterLabelEl.innerText = `FILTER: NONE`; // 💡 フィルターがない時のテキスト
         }
 
-        // リスト構築
         listEl.innerHTML = filteredRepos.map(repo => renderCard(repo)).join('');
-        
-        // ホバーSEの再割り当て
         setupHoverSounds();
     }
 
-    // 💡 タグがクリックされた時の処理
+    // タグクリックイベント（バグを修正）
     function filterByTag(event, topic) {
         event.preventDefault();
-        event.stopPropagation(); // 親のカードリンクへの遷移を止める
+        event.stopPropagation(); // 親の<a>要素への遷移を防ぐ
         playClickSound();
         currentFilter = topic;
         renderAll();
     }
 
-    // 💡 フィルターをクリアする処理
+    // フィルタークリア
     function clearFilter() {
         playClickSound();
         currentFilter = null;
@@ -314,7 +458,11 @@
         const pushedDate = new Date(repo.pushed_at).toLocaleDateString('ja-JP');
         const pagesUrl = `https://${CONFIG.username}.github.io/${repo.name}/`;
 
-        // 修正ポイント：onerrorを使わず、背景色で代用するか、最初から判定する
+        // data.jsonのカスタムデータを安全に取得するフォールバック設定
+        const displayTitle = repo.custom_title || repo.name;
+        const displayStack = repo.custom_stack ? `// SYSTEM_STACK: ${repo.custom_stack}` : (repo.language ? `// CORE_LANGUAGE: ${repo.language}` : '');
+        const displayDesc = repo.custom_description || repo.description || 'STATUS: UNKNOWN';
+
         return `
             <a href="${pagesUrl}" class="card" target="_blank" onclick="playClickSound()">
                 <div class="card-icon-wrapper">
@@ -325,10 +473,13 @@
                         onerror="this.onerror=null; this.src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';">
                 </div>
                 <div class="card-body">
-                    <span class="card-title">${repo.name}</span>
-                    <p class="card-desc">${repo.description || 'STATUS: UNKNOWN'}</p>
+                    <div class="card-title-area">
+                        ${displayStack ? `<span class="card-stack">${displayStack}</span>` : ''}
+                        <span class="card-title">${displayTitle}</span>
+                    </div>
+                    <p class="card-desc">${displayDesc}</p>
                     <div class="tags">
-                        ${(repo.topics || []).map(t => `<span class="tag">#${t}</span>`).join('')}
+                        ${(repo.topics || []).map(t => `<span class="tag" onclick="filterByTag(event, '${t}')">#${t}</span>`).join('')}
                     </div>
                     <div class="meta">CAPTURED: ${pushedDate}</div>
                 </div>
@@ -336,26 +487,22 @@
         `;
     }
     
-    let fadeInterval = null; // 実行中のインターバルを保持する変数
+    let fadeInterval = null;
 
     function setupHoverSounds() {
         const cards = document.querySelectorAll('.card');
         cards.forEach(card => {
             card.addEventListener('mouseenter', () => {
-                // 1. もしフェードアウト中なら、即座に停止してリセット
                 if (fadeInterval) {
                     clearInterval(fadeInterval);
                     fadeInterval = null;
                 }
-
-                // 2. 音量を戻して再生
                 pointSound.volume = 0.5;
                 pointSound.currentTime = 0;
                 pointSound.play().catch(() => {});
             });
 
             card.addEventListener('mouseleave', () => {
-                // 3. フェードアウトを開始
                 fadeOutAndPause(pointSound, 100);
             });
         });
@@ -368,13 +515,7 @@
         }
     }
 
-    /**
-     * 音量を滑らかに下げてから停止させる（ポップノイズ対策）
-     * @param {HTMLAudioElement} audio 
-     * @param {number} ms フェード時間（ミリ秒）
-     */
     function fadeOutAndPause(audio, ms) {
-        // 既存のフェード処理があればクリア（二重実行防止）
         if (fadeInterval) clearInterval(fadeInterval);
 
         const startVolume = audio.volume;
@@ -387,21 +528,12 @@
                 audio.volume = 0;
                 audio.pause();
                 clearInterval(fadeInterval);
-                fadeInterval = null; // 終了したのでクリア
+                fadeInterval = null;
             }
         }, 10);
     }
 
     init();
-</script>
-<script>
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-            .then(reg => console.log('Service Worker registered!'))
-            .catch(err => console.error('Service Worker failed:', err));
-        });
-    }
 </script>
 </body>
 </html>
