@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PHANTOM PROJECTS | Portfolio</title>
+    <link rel="icon" href="icon.png" type="image/png">
+    <title>WISKERPADDY PROJECTS | Portfolio</title>
     <style>
         :root {
             --p5-red: #00adb5;
@@ -197,7 +198,28 @@
     <header>
         <h1>My Archives</h1>
     </header>
-
+    
+    <section class="profile-card">
+        <div class="profile-body">
+            <span class="profile-title">SYSTEM STATUS</span>
+            <div class="profile-desc">
+                課題やアイデアを即座に実用的なアプリケーションとして具現化するデベロッパー。フロントエンド、Android（Kotlin）、自動化（GAS）など、領域を問わず自走して最適なシステムを構築します。
+            </div>
+            <div class="skill-tags">
+                <span class="skill-tag core">JavaScript (ES6+)</span>
+                <span class="skill-tag core">Kotlin (Android)</span>
+                <span class="skill-tag core">Google Apps Script</span>
+                <span class="skill-tag">Python</span>
+                <span class="skill-tag">Web Audio API</span>
+                <span class="skill-tag">HTML5 / Tone.js</span>
+                <span class="skill-tag">Git / GitHub</span>
+            </div>
+        </div>
+    </section>
+    <div id="filter-status" class="filter-status-area">
+        <span id="filter-label" class="filter-status-badge">FILTER: NONE</span>
+        <button class="btn-clear-filter" onclick="clearFilter()">SHOW ALL</button>
+    </div>
     <main id="repo-list">
         </main>
     <footer style="margin-top: 5rem; padding-bottom: 2rem; text-align: center; font-size: 0.7rem; opacity: 0.5;">
@@ -243,6 +265,48 @@
         } catch (err) {
             listEl.innerHTML = '<h2 style="transform:rotate(5deg);background:red;padding:2rem;">DATA NOT FOUND. <br>CHECK GITHUB ACTIONS!</h2>';
         }
+    }
+
+    // 💡 画面描画ロジックを一元化
+    function renderAll() {
+        const listEl = document.getElementById('repo-list');
+        const filterStatusEl = document.getElementById('filter-status');
+        const filterLabelEl = document.getElementById('filter-label');
+
+        // フィルターが掛かっている場合は絞り込む
+        const filteredRepos = currentFilter 
+            ? allRepos.filter(repo => (repo.topics || []).includes(currentFilter))
+            : allRepos;
+
+        // フィルターUIの表示切り替え
+        if (currentFilter) {
+            filterLabelEl.innerText = `FILTER: #${currentFilter.toUpperCase()}`;
+            filterStatusEl.style.display = 'block';
+        } else {
+            filterStatusEl.style.display = 'none';
+        }
+
+        // リスト構築
+        listEl.innerHTML = filteredRepos.map(repo => renderCard(repo)).join('');
+        
+        // ホバーSEの再割り当て
+        setupHoverSounds();
+    }
+
+    // 💡 タグがクリックされた時の処理
+    function filterByTag(event, topic) {
+        event.preventDefault();
+        event.stopPropagation(); // 親のカードリンクへの遷移を止める
+        playClickSound();
+        currentFilter = topic;
+        renderAll();
+    }
+
+    // 💡 フィルターをクリアする処理
+    function clearFilter() {
+        playClickSound();
+        currentFilter = null;
+        renderAll();
     }
 
     function renderCard(repo) {
@@ -309,26 +373,35 @@
      * @param {HTMLAudioElement} audio 
      * @param {number} ms フェード時間（ミリ秒）
      */
-function fadeOutAndPause(audio, ms) {
-    // 既存のフェード処理があればクリア（二重実行防止）
-    if (fadeInterval) clearInterval(fadeInterval);
+    function fadeOutAndPause(audio, ms) {
+        // 既存のフェード処理があればクリア（二重実行防止）
+        if (fadeInterval) clearInterval(fadeInterval);
 
-    const startVolume = audio.volume;
-    const step = startVolume / (ms / 10);
-    
-    fadeInterval = setInterval(() => {
-        if (audio.volume > step) {
-            audio.volume -= step;
-        } else {
-            audio.volume = 0;
-            audio.pause();
-            clearInterval(fadeInterval);
-            fadeInterval = null; // 終了したのでクリア
-        }
-    }, 10);
-}
+        const startVolume = audio.volume;
+        const step = startVolume / (ms / 10);
+        
+        fadeInterval = setInterval(() => {
+            if (audio.volume > step) {
+                audio.volume -= step;
+            } else {
+                audio.volume = 0;
+                audio.pause();
+                clearInterval(fadeInterval);
+                fadeInterval = null; // 終了したのでクリア
+            }
+        }, 10);
+    }
 
     init();
+</script>
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+            .then(reg => console.log('Service Worker registered!'))
+            .catch(err => console.error('Service Worker failed:', err));
+        });
+    }
 </script>
 </body>
 </html>
