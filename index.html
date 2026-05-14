@@ -291,6 +291,48 @@
             width: 100%;
             box-sizing: border-box;
         }
+        /* フィルターエリア全体の調整 */
+        .filter-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 2rem;
+            padding: 10px;
+        }
+
+        /* フィルター用のラベル装飾 */
+        #filter-label {
+            background: var(--p5-black);
+            color: var(--p5-white);
+            padding: 4px 15px;
+            font-weight: 900;
+            transform: skewX(-15deg);
+            box-shadow: 4px 4px 0 var(--p5-red);
+        }
+
+        /* ボタンとセレクトボックスにP5風スタイルを適用 */
+        .filter-area select,
+        .filter-area button {
+            background: var(--p5-white);
+            color: var(--p5-black);
+            border: 3px solid var(--p5-black);
+            padding: 5px 15px;
+            font-weight: 900;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transform: skewX(-10deg); /* 斜めにする */
+            box-shadow: 5px 5px 0 var(--p5-red); /* 赤い影 */
+            transition: 0.2s;
+        }
+
+        /* ホバー時に赤黒反転させる */
+        .filter-area select:hover,
+        .filter-area button:hover {
+            background: var(--p5-red);
+            color: var(--p5-white);
+            box-shadow: 2px 2px 0 var(--p5-black);
+            transform: skewX(-10deg) translate(2px, 2px);
+        }
 
         /* 3. モバイル専用設定（画面幅が600px以下の時） */
         @media (max-width: 600px) {
@@ -329,6 +371,60 @@
             .meta {
                 text-align: left; /* スマホでは左寄せが見やすい */
             }
+            /* プロジェクトリスト全体のコンテナ制限 */
+            .project-list-container {
+                max-width: 800px; /* 概要説明の幅と合わせる */
+                margin: 0 auto;
+                padding: 20px 10px;
+            }
+
+            /* フィルターエリアのレイアウト調整 */
+            .filter-area {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                gap: 15px;       /* フィルターとボタンの間の間隔 */
+                margin-bottom: 25px;
+                padding: 10px;
+                background: rgba(255, 255, 255, 0.05);
+                transform: rotate(-1deg);
+            }
+
+            /* フィルターボタン（RESET等）へのCSS適用 */
+            .filter-area button, 
+            .filter-area select {
+                background: var(--p5-white);
+                border: 3px solid var(--p5-black);
+                color: var(--p5-black);
+                padding: 5px 15px;
+                font-size: 0.9rem;
+                font-weight: 900;
+                cursor: pointer;
+                transform: skewX(-10deg);
+                transition: 0.2s;
+                box-shadow: 4px 4px 0 var(--p5-red);
+            }
+
+            .filter-area button:hover,
+            .filter-area select:hover {
+                background: var(--p5-red);
+                color: var(--p5-white);
+                box-shadow: 2px 2px 0 var(--p5-black);
+            }
+
+            /* プロジェクトカードの横幅をコンテナに合わせる */
+            .project-card {
+                width: 100%;
+                margin-bottom: 15px;
+                /* 既存のカードスタイルを維持 */
+            }
+        }
+        @media (max-width: 600px) {
+        /* モバイル時は斜め装飾を少し抑えて見やすく */
+            .filter-area {
+                flex-wrap: wrap;    
+                gap: 10px;
+            }
         }
     </style>
 </head>
@@ -358,18 +454,22 @@
         </div>
     </section>
 
-    <div id="filter-status" class="filter-container">
-        <span id="filter-label">FILTER: NONE</span>
-        <!-- セレクトボックスを追加 -->
-        <select id="tag-filter">
-            <option value="all">ALL PROJECTS</option>
-        </select>
-        <button onclick="clearFilter()">RESET</button>
-    </div>
-    </div>
+    <div class="project-list-container">
+        <div class="filter-area">
+            <span id="filter-label" style="font-size: 0.9rem; font-weight: 900; background: var(--p5-black); color: var(--p5-white); padding: 2px 10px; transform: skewX(-10deg);">
+                FILTER: NONE
+            </span>
+            
+            <select id="tag-filter">
+                <option value="all">ALL Projects</option>
+                </select>
+            
+            <button type="button" onclick="clearFilter()">RESET</button>
+        </div>
 
-    <main id="repo-list">
-    </main>
+        <main id="repo-list">
+            </main>
+    </div>
 
     <footer style="margin-top: 5rem; padding-bottom: 2rem; text-align: center; font-size: 0.7rem; opacity: 0.5;">
         <p>Sound Effect by <a href="https://soundeffect-lab.info/" target="_blank" style="color: var(--p5-white); text-decoration: none;">効果音ラボ</a></p>
