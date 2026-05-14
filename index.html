@@ -346,20 +346,26 @@
                 課題やアイデアを即座に実用的なアプリケーションとして具現化するデベロッパー。フロントエンド、Android（Kotlin）、自動化（GAS）など、領域を問わず自走して最適なシステムを構築します。
             </div>
             <div class="skill-tags">
-                <span class="skill-tag core" onclick="filterByTag(event, 'javascript')">JavaScript (ES6+)</span>
+                <span class="skill-tag core" onclick="filterByTag(event, 'javascript')">JavaScript</span>
                 <span class="skill-tag core" onclick="filterByTag(event, 'kotlin')">Kotlin (Android)</span>
                 <span class="skill-tag core" onclick="filterByTag(event, 'google-apps-script')">Google Apps Script</span>
                 <span class="skill-tag" onclick="filterByTag(event, 'python')">Python</span>
                 <span class="skill-tag" onclick="filterByTag(event, 'web-audio-api')">Web Audio API</span>
                 <span class="skill-tag" onclick="filterByTag(event, 'tone-js')">HTML5 / Tone.js</span>
+                <span class="skill-tag" onclick="filterByTag(event, 'abc-js')">abc.js</span>
                 <span class="skill-tag" onclick="filterByTag(event, 'github')">Git / GitHub</span>
             </div>
         </div>
     </section>
 
-    <div id="filter-status" class="filter-status-area">
-        <span id="filter-label" class="filter-status-badge">FILTER: NONE</span>
-        <button class="btn-clear-filter" onclick="clearFilter()">SHOW ALL</button>
+    <div id="filter-status" class="filter-container">
+        <span id="filter-label">FILTER: NONE</span>
+        <!-- セレクトボックスを追加 -->
+        <select id="tag-filter">
+            <option value="all">ALL PROJECTS</option>
+        </select>
+        <button onclick="clearFilter()">RESET</button>
+    </div>
     </div>
 
     <main id="repo-list">
@@ -386,13 +392,11 @@
         document.body.style.backgroundPosition = `${moveX}px ${moveY}px`;
     });
 
-    // 音声オブジェクトの設定
     const clickSound = new Audio(CONFIG.clickSoundUrl);
     const pointSound = new Audio(CONFIG.pointSoundUrl);
-    pointSound.loop = true; // ホバー中はループ再生
-    pointSound.volume = 0.5; // 音量は適宜調整してください
+    pointSound.loop = true;
+    pointSound.volume = 0.5;
 
-    // グローバルで保持するデータとアクティブフィルター
     let allRepos = [];
     let currentFilter = null;
 
@@ -403,6 +407,10 @@
             if (!res.ok) throw new Error();
             allRepos = await res.json();
             
+            // 1. セレクトボックスの選択肢を生成
+            generateFilterOptions();
+            
+            // 2. 初回描画
             renderAll();
             
         } catch (err) {
@@ -410,43 +418,67 @@
         }
     }
 
-    // 画面再描画
+    // セレクトボックスの選択肢を動的に作る
+    function generateFilterOptions() {
+        const filterSelect = document.getElementById('tag-filter');
+        if (!filterSelect) return;
+
+        const allTags = new Set();
+        allRepos.forEach(repo => {
+            (repo.topics || []).forEach(tag => allTags.add(tag));
+        });
+
+        // アルファベット順にソートして追加
+        Array.from(allTags).sort().forEach(tag => {
+            const option = document.createElement('option');
+            option.value = tag;
+            option.textContent = tag.toUpperCase();
+            filterSelect.appendChild(option);
+        });
+
+        // セレクトボックス操作時のイベント
+        filterSelect.addEventListener('change', (e) => {
+            currentFilter = e.target.value === 'all' ? null : e.target.value;
+            renderAll();
+        });
+    }
+
     function renderAll() {
         const listEl = document.getElementById('repo-list');
-        const filterStatusEl = document.getElementById('filter-status');
         const filterLabelEl = document.getElementById('filter-label');
+        const filterSelect = document.getElementById('tag-filter');
 
-        // 絞り込み処理
+        // 絞り込みロジック
         const filteredRepos = currentFilter 
             ? allRepos.filter(repo => {
-                const topics = repo.topics || [];
-                return topics.some(t => t.toLowerCase() === currentFilter.toLowerCase() || t.toLowerCase().replace(/-/g, '') === currentFilter.toLowerCase().replace(/-/g, ''));
+                const topics = (repo.topics || []).map(t => t.toLowerCase());
+                const target = currentFilter.toLowerCase();
+                return topics.includes(target) || topics.some(t => t.replace(/-/g, '') === target.replace(/-/g, ''));
             })
             : allRepos;
 
-        // 💡 修正ポイント：条件を消して、常に 'block' (表示) にする
-        filterStatusEl.style.display = 'block'; 
-
+        // UI表示の更新
         if (currentFilter) {
             filterLabelEl.innerText = `FILTER: #${currentFilter.toUpperCase()}`;
+            if (filterSelect) filterSelect.value = currentFilter; // セレクトボックスの状態を同期
         } else {
-            filterLabelEl.innerText = `FILTER: NONE`; // 💡 フィルターがない時のテキスト
+            filterLabelEl.innerText = `FILTER: NONE`;
+            if (filterSelect) filterSelect.value = 'all';
         }
 
         listEl.innerHTML = filteredRepos.map(repo => renderCard(repo)).join('');
         setupHoverSounds();
     }
 
-    // タグクリックイベント（バグを修正）
+    // タグクリック時
     function filterByTag(event, topic) {
         event.preventDefault();
-        event.stopPropagation(); // 親の<a>要素への遷移を防ぐ
+        event.stopPropagation();
         playClickSound();
-        currentFilter = topic;
+        currentFilter = topic; // フィルターをセット
         renderAll();
     }
 
-    // フィルタークリア
     function clearFilter() {
         playClickSound();
         currentFilter = null;
@@ -458,7 +490,6 @@
         const pushedDate = new Date(repo.pushed_at).toLocaleDateString('ja-JP');
         const pagesUrl = `https://${CONFIG.username}.github.io/${repo.name}/`;
 
-        // data.jsonのカスタムデータを安全に取得するフォールバック設定
         const displayTitle = repo.custom_title || repo.name;
         const displayStack = repo.custom_stack ? `// SYSTEM_STACK: ${repo.custom_stack}` : (repo.language ? `// CORE_LANGUAGE: ${repo.language}` : '');
         const displayDesc = repo.custom_description || repo.description || 'STATUS: UNKNOWN';
@@ -466,11 +497,8 @@
         return `
             <a href="${pagesUrl}" class="card" target="_blank" onclick="playClickSound()">
                 <div class="card-icon-wrapper">
-                    <img src="${iconUrl}" 
-                        class="card-icon" 
-                        style="background-color: #222;" 
-                        alt=""
-                        onerror="this.onerror=null; this.src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';">
+                    <img src="${iconUrl}" class="card-icon" style="background-color: #222;" alt=""
+                         onerror="this.onerror=null; this.src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';">
                 </div>
                 <div class="card-body">
                     <div class="card-title-area">
@@ -487,24 +515,18 @@
         `;
     }
     
+    // （以下、音声関連の関数 setupHoverSounds, playClickSound, fadeOutAndPause はそのまま維持）
     let fadeInterval = null;
-
     function setupHoverSounds() {
         const cards = document.querySelectorAll('.card');
         cards.forEach(card => {
             card.addEventListener('mouseenter', () => {
-                if (fadeInterval) {
-                    clearInterval(fadeInterval);
-                    fadeInterval = null;
-                }
+                if (fadeInterval) clearInterval(fadeInterval);
                 pointSound.volume = 0.5;
                 pointSound.currentTime = 0;
                 pointSound.play().catch(() => {});
             });
-
-            card.addEventListener('mouseleave', () => {
-                fadeOutAndPause(pointSound, 100);
-            });
+            card.addEventListener('mouseleave', () => fadeOutAndPause(pointSound, 100));
         });
     }
 
@@ -517,14 +539,10 @@
 
     function fadeOutAndPause(audio, ms) {
         if (fadeInterval) clearInterval(fadeInterval);
-
-        const startVolume = audio.volume;
-        const step = startVolume / (ms / 10);
-        
+        const step = audio.volume / (ms / 10);
         fadeInterval = setInterval(() => {
-            if (audio.volume > step) {
-                audio.volume -= step;
-            } else {
+            if (audio.volume > step) audio.volume -= step;
+            else {
                 audio.volume = 0;
                 audio.pause();
                 clearInterval(fadeInterval);
