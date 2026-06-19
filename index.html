@@ -13,6 +13,12 @@
             --p5-gray: #1a1a1a;
         }
 
+        /* 修正: htmlとbodyの両方で横はみ出しを完全にシャットアウト */
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+        }
+
         /* 背景：P5風ダイヤパターン + パララックス対応 */
         body { 
             background-color: var(--p5-black);
@@ -24,7 +30,6 @@
             background-position: 0 0;
             color: var(--p5-white);
             font-family: 'Arial Black', 'Impact', sans-serif;
-            overflow-x: hidden;
             padding: 4rem 1rem;
             transition: background-position 0.1s ease-out;
         }
@@ -39,7 +44,7 @@
             z-index: -1;
         }
 
-        .container { max-width: 900px; margin: 0 auto; }
+        .container { max-width: 900px; margin: 0 auto; box-sizing: border-box; }
 
         header { 
             margin-bottom: 5rem; 
@@ -92,6 +97,7 @@
             background: var(--p5-white);
             color: var(--p5-black);
             display: flex;
+            flex-direction: row; /* デフォルトは横並び */
             text-decoration: none;
             transform: skewX(-6deg);
             transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
@@ -99,6 +105,8 @@
             position: relative;
             box-shadow: 15px 15px 0 rgba(0,0,0,0.6);
             cursor: pointer;
+            box-sizing: border-box;
+            width: 100%;
         }
 
         .card:hover {
@@ -137,14 +145,13 @@
             margin-bottom: 0.8rem;
         }
 
-        /* 💡 隙間調整：技術スタック表示の下にマージンを追加 */
         .card-stack {
             font-size: 0.8rem;
             font-weight: 900;
             color: var(--p5-red);
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 0.5rem; /* ここで程よい隙間を空けました */
+            margin-bottom: 0.5rem;
         }
 
         .card-title { 
@@ -154,6 +161,7 @@
             padding: 4px 18px;
             display: inline-block;
         }
+        
         /* プロフィールカードのスタイル設定 */
         .profile-card {
             background: var(--p5-white);
@@ -163,10 +171,11 @@
             transform: skewX(-6deg);
             border: 5px solid var(--p5-black);
             box-shadow: 15px 15px 0 rgba(0,0,0,0.6);
+            box-sizing: border-box;
         }
 
         .profile-body {
-            transform: skewX(6deg); /* 歪みを戻す */
+            transform: skewX(6deg);
         }
 
         .profile-title {
@@ -188,14 +197,12 @@
             color: #111;
         }
 
-        /* プロフィール側のスキルタグ用コンテナ */
         .skill-tags {
             display: flex;
             flex-wrap: wrap;
             gap: 0.6rem;
         }
 
-        /* スキルタグをボタンとしてデザイン */
         .skill-tag {
             background: var(--p5-gray);
             color: var(--p5-white);
@@ -219,34 +226,6 @@
             transform: scale(1.1) rotate(1deg);
         }
 
-        /* 絞り込み中ステータス表示エリア */
-        .filter-status-area {
-            margin-bottom: 2rem;
-            font-size: 1.1rem;
-            font-weight: bold;
-            display: none;
-            transform: rotate(-1deg);
-        }
-        .filter-status-badge {
-            background: var(--p5-white);
-            color: var(--p5-black);
-            padding: 4px 15px;
-            box-shadow: 5px 5px 0 var(--p5-red);
-            margin-right: 10px;
-            display: inline-block;
-            transform: skewX(-10deg);
-        }
-        .btn-clear-filter {
-            background: var(--p5-red);
-            color: var(--p5-white);
-            border: 3px solid var(--p5-black);
-            padding: 2px 10px;
-            cursor: pointer;
-            font-weight: 900;
-            transform: skewX(-10deg);
-        }
-
-        /* ホバー時のノイズ（グリッチ） */
         @keyframes glitch {
             0% { transform: translate(0); }
             25% { transform: translate(-2px, 1px); }
@@ -259,7 +238,6 @@
 
         .tags { display: flex; flex-wrap: wrap; gap: 0.6rem; }
         
-        /* タグをホバーした際の変化 */
         .tag { 
             background: var(--p5-red); color: white;
             padding: 2px 12px; font-size: 0.75rem;
@@ -273,25 +251,13 @@
 
         .meta { margin-top: 1.2rem; font-size: 0.8rem; text-align: right; opacity: 0.7; font-style: italic; }
 
-        /* 手書き風装飾 */
         .card::after {
             content: 'TAKE YOUR HEART';
             position: absolute; bottom: 5px; right: 15px;
             font-size: 0.65rem; color: var(--p5-red); font-weight: bold; opacity: 0.4;
         }
 
-        /* 1. 画面全体の余白をスマホで調整 */
-        body {
-            padding: 2rem 0.5rem; /* スマホでは左右の余白を狭く */
-        }
-
-        /* 2. カードの横並びを縦並びに切り替え */
-        .card {
-            flex-direction: row; /* 基本は横並び */
-            width: 100%;
-            box-sizing: border-box;
-        }
-        /* フィルターエリア全体の調整 */
+        /* フィルターエリア共通設定 */
         .filter-area {
             display: flex;
             align-items: center;
@@ -300,7 +266,6 @@
             padding: 10px;
         }
 
-        /* フィルター用のラベル装飾 */
         #filter-label {
             background: var(--p5-black);
             color: var(--p5-white);
@@ -310,7 +275,6 @@
             box-shadow: 4px 4px 0 var(--p5-red);
         }
 
-        /* ボタンとセレクトボックスにP5風スタイルを適用 */
         .filter-area select,
         .filter-area button {
             background: var(--p5-white);
@@ -320,12 +284,11 @@
             font-weight: 900;
             font-size: 0.9rem;
             cursor: pointer;
-            transform: skewX(-10deg); /* 斜めにする */
-            box-shadow: 5px 5px 0 var(--p5-red); /* 赤い影 */
+            transform: skewX(-10deg);
+            box-shadow: 5px 5px 0 var(--p5-red);
             transition: 0.2s;
         }
 
-        /* ホバー時に赤黒反転させる */
         .filter-area select:hover,
         .filter-area button:hover {
             background: var(--p5-red);
@@ -334,30 +297,52 @@
             transform: skewX(-10deg) translate(2px, 2px);
         }
 
+        .project-list-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px 10px;
+        }
+
         /* 3. モバイル専用設定（画面幅が600px以下の時） */
         @media (max-width: 600px) {
+            /* 修正: スマホでは外枠のパディングを少し狭くし、かつ右側に影(15px)の逃げ道を確保 */
+            body {
+                padding: 2rem 0.5rem 2rem 0.5rem;
+            }
+
+            .project-list-container {
+                /* 右側のパディングを少し多め(25px)に取ることで、カードの太い影と傾きが画面外へはみ出すのを防ぎます */
+                padding: 20px 25px 20px 10px; 
+            }
+
             header {
                 margin-bottom: 3rem;
             }
 
             h1 {
-                font-size: 2rem; /* タイトルを小さく */
+                font-size: 2rem;
                 padding: 0.2rem 1rem;
             }
 
             .card {
                 flex-direction: column; /* 縦並びに変更 */
-                transform: skewX(-3deg); /* 歪みを少し抑える（見やすさ重視） */
+                transform: skewX(-3deg); /* 歪みを少し抑える */
+            }
+
+            .profile-card {
+                transform: skewX(-3deg);
+                /* プロフィールカードも右側の影がはみ出さないよう幅を調整 */
+                width: calc(100% - 15px);
             }
 
             .card-icon-wrapper {
-                width: 100%; /* アイコンを全幅に */
+                width: 100%;
                 height: 180px;
-                clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%); /* 切り抜きを下に */
+                clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%);
             }
 
             .card-body {
-                transform: skewX(3deg); /* 歪みを戻す */
+                transform: skewX(3deg);
                 padding: 1rem;
             }
 
@@ -369,61 +354,15 @@
             }
 
             .meta {
-                text-align: left; /* スマホでは左寄せが見やすい */
-            }
-            /* プロジェクトリスト全体のコンテナ制限 */
-            .project-list-container {
-                max-width: 800px; /* 概要説明の幅と合わせる */
-                margin: 0 auto;
-                padding: 20px 10px;
+                text-align: left;
             }
 
-            /* フィルターエリアのレイアウト調整 */
-            .filter-area {
-                display: flex;
-                align-items: center;
-                justify-content: flex-start;
-                gap: 15px;       /* フィルターとボタンの間の間隔 */
-                margin-bottom: 25px;
-                padding: 10px;
-                background: rgba(255, 255, 255, 0.05);
-                transform: rotate(-1deg);
-            }
-
-            /* フィルターボタン（RESET等）へのCSS適用 */
-            .filter-area button, 
-            .filter-area select {
-                background: var(--p5-white);
-                border: 3px solid var(--p5-black);
-                color: var(--p5-black);
-                padding: 5px 15px;
-                font-size: 0.9rem;
-                font-weight: 900;
-                cursor: pointer;
-                transform: skewX(-10deg);
-                transition: 0.2s;
-                box-shadow: 4px 4px 0 var(--p5-red);
-            }
-
-            .filter-area button:hover,
-            .filter-area select:hover {
-                background: var(--p5-red);
-                color: var(--p5-white);
-                box-shadow: 2px 2px 0 var(--p5-black);
-            }
-
-            /* プロジェクトカードの横幅をコンテナに合わせる */
-            .project-card {
-                width: 100%;
-                margin-bottom: 15px;
-                /* 既存のカードスタイルを維持 */
-            }
-        }
-        @media (max-width: 600px) {
-        /* モバイル時は斜め装飾を少し抑えて見やすく */
             .filter-area {
                 flex-wrap: wrap;    
                 gap: 10px;
+                background: rgba(255, 255, 255, 0.05);
+                transform: rotate(-1deg);
+                margin-bottom: 25px;
             }
         }
     </style>
@@ -462,13 +401,13 @@
             
             <select id="tag-filter">
                 <option value="all">ALL Projects</option>
-                </select>
+            </select>
             
             <button type="button" onclick="clearFilter()">RESET</button>
         </div>
 
         <main id="repo-list">
-            </main>
+        </main>
     </div>
 
     <footer style="margin-top: 5rem; padding-bottom: 2rem; text-align: center; font-size: 0.7rem; opacity: 0.5;">
@@ -615,7 +554,6 @@
         `;
     }
     
-    // （以下、音声関連の関数 setupHoverSounds, playClickSound, fadeOutAndPause はそのまま維持）
     let fadeInterval = null;
     function setupHoverSounds() {
         const cards = document.querySelectorAll('.card');
