@@ -13,7 +13,6 @@
             --p5-gray: #1a1a1a;
         }
 
-        /* 修正: htmlとbodyの両方で横はみ出しを完全にシャットアウト */
         html, body {
             width: 100%;
             overflow-x: hidden;
@@ -63,7 +62,7 @@
             text-transform: uppercase;
         }
 
-        /* 💡 フィルターのアクティブ状態を示すエリア */
+        /* フィルターのアクティブ状態を示すエリア */
         .filter-status-area {
             margin-bottom: 2rem;
             font-size: 1.1rem;
@@ -92,12 +91,12 @@
 
         #repo-list { display: grid; gap: 2.5rem; }
 
-        /* カード：歪みと立体感 */
+        /* カード：デフォルト（PC）設定 */
         .card {
             background: var(--p5-white);
             color: var(--p5-black);
             display: flex;
-            flex-direction: row; /* デフォルトは横並び */
+            flex-direction: row;
             text-decoration: none;
             transform: skewX(-6deg);
             transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
@@ -115,7 +114,6 @@
             z-index: 10;
         }
 
-        /* アイコン切り抜き */
         .card-icon-wrapper {
             width: 150px; height: 150px;
             background: var(--p5-black);
@@ -135,7 +133,7 @@
 
         .card-body { 
             flex: 1; padding: 1.2rem;
-            transform: skewX(6deg); /* テキストの歪みを戻す */
+            transform: skewX(6deg);
         }
 
         .card-title-area {
@@ -162,7 +160,6 @@
             display: inline-block;
         }
         
-        /* プロフィールカードのスタイル設定 */
         .profile-card {
             background: var(--p5-white);
             color: var(--p5-black);
@@ -174,9 +171,7 @@
             box-sizing: border-box;
         }
 
-        .profile-body {
-            transform: skewX(6deg);
-        }
+        .profile-body { transform: skewX(6deg); }
 
         .profile-title {
             font-size: 1.4rem;
@@ -197,11 +192,7 @@
             color: #111;
         }
 
-        .skill-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.6rem;
-        }
+        .skill-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; }
 
         .skill-tag {
             background: var(--p5-gray);
@@ -214,17 +205,8 @@
             user-select: none;
         }
 
-        .skill-tag.core {
-            background: var(--p5-red);
-            color: var(--p5-white);
-            font-weight: 900;
-        }
-
-        .skill-tag:hover {
-            background: var(--p5-black);
-            color: var(--p5-white);
-            transform: scale(1.1) rotate(1deg);
-        }
+        .skill-tag.core { background: var(--p5-red); color: var(--p5-white); font-weight: 900; }
+        .skill-tag:hover { background: var(--p5-black); color: var(--p5-white); transform: scale(1.1) rotate(1deg); }
 
         @keyframes glitch {
             0% { transform: translate(0); }
@@ -235,7 +217,6 @@
         .card:hover .card-title { animation: glitch 0.15s infinite; }
 
         .card-desc { font-size: 0.95rem; font-weight: bold; line-height: 1.4; margin-bottom: 1rem; }
-
         .tags { display: flex; flex-wrap: wrap; gap: 0.6rem; }
         
         .tag { 
@@ -244,10 +225,7 @@
             transform: rotate(-2deg) skewX(-10deg);
             transition: 0.1s;
         }
-        .tag:hover {
-            background: var(--p5-black);
-            color: var(--p5-white);
-        }
+        .tag:hover { background: var(--p5-black); color: var(--p5-white); }
 
         .meta { margin-top: 1.2rem; font-size: 0.8rem; text-align: right; opacity: 0.7; font-style: italic; }
 
@@ -257,7 +235,6 @@
             font-size: 0.65rem; color: var(--p5-red); font-weight: bold; opacity: 0.4;
         }
 
-        /* フィルターエリア共通設定 */
         .filter-area {
             display: flex;
             align-items: center;
@@ -289,80 +266,124 @@
             transition: 0.2s;
         }
 
-        .filter-area select:hover,
-        .filter-area button:hover {
-            background: var(--p5-red);
-            color: var(--p5-white);
-            box-shadow: 2px 2px 0 var(--p5-black);
-            transform: skewX(-10deg) translate(2px, 2px);
-        }
-
         .project-list-container {
             max-width: 800px;
             margin: 0 auto;
             padding: 20px 10px;
         }
 
-        /* 3. モバイル専用設定（画面幅が600px以下の時） */
+        /* =========================================================
+           🛠️ モバイル専用設定（ここをさらに一回り小さく調整しました）
+           ========================================================= */
         @media (max-width: 600px) {
-            /* 修正: スマホでは外枠のパディングを少し狭くし、かつ右側に影(15px)の逃げ道を確保 */
             body {
-                padding: 2rem 0.5rem 2rem 0.5rem;
+                padding: 2rem 0.4rem; /* 上下余白を少し縮小 */
             }
 
             .project-list-container {
-                /* 右側のパディングを少し多め(25px)に取ることで、カードの太い影と傾きが画面外へはみ出すのを防ぎます */
-                padding: 20px 25px 20px 10px; 
+                padding: 10px 20px 10px 5px; /* 右側の影の逃げ道を確保 */
             }
 
             header {
-                margin-bottom: 3rem;
+                margin-bottom: 2.5rem;
             }
 
             h1 {
-                font-size: 2rem;
-                padding: 0.2rem 1rem;
+                font-size: 1.8rem; /* 2remからさらに縮小 */
+                padding: 0.2rem 0.8rem;
+            }
+
+            #repo-list {
+                gap: 1.5rem; /* カード同士の間隔を狭くしてコンパクトに */
             }
 
             .card {
-                flex-direction: column; /* 縦並びに変更 */
-                transform: skewX(-3deg); /* 歪みを少し抑える */
+                flex-direction: column;
+                transform: skewX(-2deg); /* 歪みを緩くして横幅を節約 */
+                box-shadow: 10px 10px 0 rgba(0,0,0,0.6); /* 影を細く */
+                border: 4px solid var(--p5-black); /* 線を細く */
             }
 
             .profile-card {
-                transform: skewX(-3deg);
-                /* プロフィールカードも右側の影がはみ出さないよう幅を調整 */
-                width: calc(100% - 15px);
+                transform: skewX(-2deg);
+                width: calc(100% - 12px);
+                padding: 1.2rem; /* 内側の余白を削る */
+                margin-bottom: 2.5rem;
+                box-shadow: 10px 10px 0 rgba(0,0,0,0.6);
+                border: 4px solid var(--p5-black);
+            }
+
+            .profile-title {
+                font-size: 1.1rem; /* 小さく */
+                margin-bottom: 0.6rem;
+            }
+
+            .profile-desc {
+                font-size: 0.85rem; /* 小さく */
+                line-height: 1.5;
             }
 
             .card-icon-wrapper {
                 width: 100%;
-                height: 180px;
-                clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%);
+                height: 130px; /* 画像エリアの高さを抑える */
+                clip-path: polygon(0 0, 100% 0, 100% 88%, 0% 100%);
             }
 
             .card-body {
-                transform: skewX(3deg);
-                padding: 1rem;
+                transform: skewX(2deg);
+                padding: 0.8rem; /* カード内の余白をタイトに */
             }
 
+            .card-stack {
+                font-size: 0.7rem; /* システムスタック名を小さく */
+                margin-bottom: 0.3rem;
+            }
+
+            /* 💡画像で見切れていたタイトル部分の修正 */
             .card-title {
-                font-size: 1.2rem;
+                font-size: 1.1rem; /* 1.2remからさらに縮小 */
                 width: 100%;
                 display: block;
                 box-sizing: border-box;
+                padding: 3px 10px;
+                word-break: break-all; /* 長い英単語でも枠を突き抜けずに自動で折り返す */
+                white-space: normal;
+            }
+
+            .card-desc {
+                font-size: 0.85rem; /* 説明文を一回り小さく */
+                margin-bottom: 0.8rem;
+                line-height: 1.35;
+            }
+
+            .tag {
+                padding: 2px 8px;
+                font-size: 0.7rem; /* タグを小さく */
             }
 
             .meta {
                 text-align: left;
+                font-size: 0.7rem;
+                margin-top: 0.8rem;
             }
 
             .filter-area {
                 flex-wrap: wrap;    
-                gap: 10px;
-                background: rgba(255, 255, 255, 0.05);
-                transform: rotate(-1deg);
-                margin-bottom: 25px;
+                gap: 8px;
+                padding: 6px;
+                margin-bottom: 15px;
+            }
+            
+            #filter-label {
+                font-size: 0.75rem;
+                padding: 2px 8px;
+            }
+
+            .filter-area select,
+            .filter-area button {
+                padding: 4px 10px;
+                font-size: 0.8rem;
+                box-shadow: 3px 3px 0 var(--p5-red);
             }
         }
     </style>
@@ -395,7 +416,7 @@
 
     <div class="project-list-container">
         <div class="filter-area">
-            <span id="filter-label" style="font-size: 0.9rem; font-weight: 900; background: var(--p5-black); color: var(--p5-white); padding: 2px 10px; transform: skewX(-10deg);">
+            <span id="filter-label">
                 FILTER: NONE
             </span>
             
@@ -424,7 +445,6 @@
         pointSoundUrl: 'pointSound.mp3',
     };
 
-    // 背景パララックス
     document.addEventListener('mousemove', (e) => {
         const moveX = (e.clientX / window.innerWidth - 0.5) * 30;
         const moveY = (e.clientY / window.innerHeight - 0.5) * 30;
@@ -446,10 +466,7 @@
             if (!res.ok) throw new Error();
             allRepos = await res.json();
             
-            // 1. セレクトボックスの選択肢を生成
             generateFilterOptions();
-            
-            // 2. 初回描画
             renderAll();
             
         } catch (err) {
@@ -457,7 +474,6 @@
         }
     }
 
-    // セレクトボックスの選択肢を動的に作る
     function generateFilterOptions() {
         const filterSelect = document.getElementById('tag-filter');
         if (!filterSelect) return;
@@ -467,7 +483,6 @@
             (repo.topics || []).forEach(tag => allTags.add(tag));
         });
 
-        // アルファベット順にソートして追加
         Array.from(allTags).sort().forEach(tag => {
             const option = document.createElement('option');
             option.value = tag;
@@ -475,7 +490,6 @@
             filterSelect.appendChild(option);
         });
 
-        // セレクトボックス操作時のイベント
         filterSelect.addEventListener('change', (e) => {
             currentFilter = e.target.value === 'all' ? null : e.target.value;
             renderAll();
@@ -487,7 +501,6 @@
         const filterLabelEl = document.getElementById('filter-label');
         const filterSelect = document.getElementById('tag-filter');
 
-        // 絞り込みロジック
         const filteredRepos = currentFilter 
             ? allRepos.filter(repo => {
                 const topics = (repo.topics || []).map(t => t.toLowerCase());
@@ -496,10 +509,9 @@
             })
             : allRepos;
 
-        // UI表示の更新
         if (currentFilter) {
             filterLabelEl.innerText = `FILTER: #${currentFilter.toUpperCase()}`;
-            if (filterSelect) filterSelect.value = currentFilter; // セレクトボックスの状態を同期
+            if (filterSelect) filterSelect.value = currentFilter;
         } else {
             filterLabelEl.innerText = `FILTER: NONE`;
             if (filterSelect) filterSelect.value = 'all';
@@ -509,12 +521,11 @@
         setupHoverSounds();
     }
 
-    // タグクリック時
     function filterByTag(event, topic) {
         event.preventDefault();
         event.stopPropagation();
         playClickSound();
-        currentFilter = topic; // フィルターをセット
+        currentFilter = topic;
         renderAll();
     }
 
